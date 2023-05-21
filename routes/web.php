@@ -14,4 +14,4 @@ use App\Http\Controllers\PeopleController;
 |
 */
 
-Route::get('/opiela/52205/', [PeopleController::class, 'index']);
+Route::get('/opiela/52205/read/{id}', [PeopleController::class, 'read']);

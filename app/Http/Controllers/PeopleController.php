@@ -11,54 +11,58 @@ class PeopleController extends Controller
      */
     public function index()
     {
-        return People::get();
+        $people = People::all();
+        return response()->json($people);
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
+    public function store(Request $request){
+        $request->validate([
+            'name' => ['required'],
+            'phone' => ['required'],
+            'street' => ['required'],
+            'city' => ['required'],
+            'country' => ['required'],
+            'email' => ['required'],
+            'password' => ['required'],
+        ]);
+
+        $people = new People;
+        $people->name = $request->name;
+        $people->phone = $request->phone;
+        $people->street = $request->street;
+        $people->city = $request->city;
+        $people->country = $request->country;
+        $people->email = $request->email;
+        $people->password = $request->password;
+        $people->save();
+        // return response()->json(['message'=>'Person added successfully'], 200);
+        return $people;
+    }
+    public function edit(Request $request)
     {
-        //
-    }
+        $people = People::findorfail($request->id);
+        $people->name = $request->name;
+        $people->phone = $request->phone;
+        $people->street = $request->street;
+        $people->city = $request->city;
+        $people->country = $request->country;
+        $people->email = $request->email;
+        $people->password = $request->password;
 
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(Request $request)
-    {
-        //
+        $people->update();
+        return $people;
     }
-
-    /**
-     * Display the specified resource.
-     */
-    public function show(string $id)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(string $id)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, string $id)
-    {
-        //
-    }
-
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function delete(Request $request) 
     {
-        //
+        $people = People::findorfail($request->id)->delete();
+        return response()->json('Deleted successfully');
+    }
+    public function read($request)
+    {
+        $people = People::where("id", $request)->get();
+        return $people;
     }
 }
